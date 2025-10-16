@@ -31,7 +31,7 @@
     "docker:db:up": "docker-compose -f docker-compose.db.yml up -d",
     "docker:db:down": "docker-compose -f docker-compose.db.yml down",
     "docker:db:logs": "docker-compose -f docker-compose.db.yml logs -f",
-    "dev:local": "concurrently --names \"DB,FRONTEND,BACKEND\" --prefix-colors \"yellow,blue,green\" \"npm run docker:db:up\" \"npm run frontend:dev\" \"npm run backend:dev\""
+    "dev:local": "concurrently --names \"DB,APPS\" --prefix-colors \"blue,yellow\" \"npm run docker:db:up\" \"npm run dev\""
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
