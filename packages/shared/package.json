@@ -1,0 +1,22 @@
+{
+  "name": "@bobs-corn/shared",
+  "version": "0.1.0",
+  "description": "Shared utilities and types for Bob's Corn monorepo",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rimraf dist",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist"
+  ]
+}
