@@ -24,7 +24,14 @@
     "frontend:start": "npm run start --workspace=apps/frontend",
     "backend:dev": "npm run dev --workspace=apps/backend",
     "backend:build": "npm run build --workspace=apps/backend",
-    "backend:start": "npm run start --workspace=apps/backend"
+    "backend:start": "npm run start --workspace=apps/backend",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:db:up": "docker-compose -f docker-compose.db.yml up -d",
+    "docker:db:down": "docker-compose -f docker-compose.db.yml down",
+    "docker:db:logs": "docker-compose -f docker-compose.db.yml logs -f",
+    "dev:local": "concurrently --names \"DB,FRONTEND,BACKEND\" --prefix-colors \"yellow,blue,green\" \"npm run docker:db:up\" \"npm run frontend:dev\" \"npm run backend:dev\""
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

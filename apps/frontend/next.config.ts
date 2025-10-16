@@ -1,7 +1,9 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: 'standalone',
+  serverExternalPackages: [],
+  assetPrefix: process.env.NODE_ENV === 'production' ? undefined : undefined,
 };
 
 export default nextConfig;

@@ -149,7 +149,14 @@ ehthumbs.db
 yarn-error.log
 
 # dotenv environment variable files
-.env*
+.env
+.env.local
+.env.*.local
+
+# Keep example files
+!.env.example
+!.env.development
+!.env.production
 
 # Serverless Framework
 .serverless/
@@ -164,3 +171,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+
+# Docker
+.dockerignore
+docker-compose.override.yml
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
