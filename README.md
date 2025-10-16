@@ -75,7 +75,7 @@ npm run docker:down
 
 ### Desarrollo local
 - `npm run dev` - Ejecuta frontend y backend localmente (sin DB)
-- `npm run dev:hybrid` - DB en Docker, frontend y backend locales
+- `npm run dev:local` - DB en Docker, frontend y backend locales
 
 ### Solo base de datos
 - `npm run docker:db:up` - Solo base de datos en Docker
