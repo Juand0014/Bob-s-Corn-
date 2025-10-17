@@ -3,14 +3,16 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger } from '@nestjs/common';
 import { AppModule } from './app.module';
+import { ConfigService } from './config/config.service';
 
 async function bootstrap(): Promise<void> {
   const logger = new Logger('Bootstrap');
+  const serverConfig = ConfigService.getServerConfig();
 
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: ['http://localhost:3000'],
+    origin: [serverConfig.corsOrigin],
     credentials: true,
   });
 
@@ -23,11 +25,14 @@ async function bootstrap(): Promise<void> {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  const port = 3001;
-  await app.listen(port);
+  await app.listen(serverConfig.port);
 
-  logger.log(`Bob's Corn Server running on http://localhost:${port}`);
-  logger.log(`Swagger API Documentation: http://localhost:${port}/api`);
+  logger.log(
+    `Bob's Corn Server running on http://localhost:${serverConfig.port}`,
+  );
+  logger.log(
+    `Swagger API Documentation: http://localhost:${serverConfig.port}/api`,
+  );
 }
 
 void bootstrap();
