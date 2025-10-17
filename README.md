@@ -1,101 +1,170 @@
-# Bob's Corn - Monorepo
+# Bob's Corn Monorepo
 
-Un monorepo simple con Next.js (frontend) y NestJS (backend) usando PostgreSQL.
+Un monorepo full-stack con Next.js, NestJS, y tipos TypeScript compartidos usando `@packages` aliases.
 
-## Estructura del proyecto
-
-```
-├── apps/
-│   ├── frontend/    # Next.js app (puerto 3000)
-│   └── backend/     # NestJS API (puerto 3001)
-├── packages/
-│   └── shared/      # Tipos y utilidades compartidas
-└── docker-compose.yml
-```
-
-## Desarrollo local
-
-### Sin Docker
-
-1. Instalar dependencias:
+## 🚀 Inicio Rápido
 
 ```bash
+# 1. Instalación
 npm install
-```
 
-2. Ejecutar ambas aplicaciones:
+# 2. Base de datos (Docker)
+docker-compose up -d
 
-```bash
+# 3. Desarrollo completo
 npm run dev
 ```
 
-Esto ejecutará el frontend en http://localhost:3000 y el backend en http://localhost:3001
+## 📦 Configuración de @packages
 
-### Híbrido (DB en Docker, Apps locales)
+Este monorepo usa `@packages` como alias para importaciones limpias:
 
-1. Ejecutar base de datos en Docker y apps localmente:
+```typescript
+// ✅ Con @packages (limpio)
+import { User, PurchaseRequest } from '@packages/shared';
 
-```bash
-npm run dev:hybrid
+// ❌ Sin alias (complicado) 
+import { User } from '../../../../packages/shared/src/types';
 ```
 
-2. Solo base de datos:
+### Configuración TypeScript
 
-```bash
-npm run docker:db:up
+**Backend (`apps/backend/tsconfig.json`)**:
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@packages/*": ["../../packages/*"]
+    }
+  }
+}
 ```
 
-3. Detener solo la base de datos:
-
-```bash
-npm run docker:db:down
+**Frontend (`apps/frontend/tsconfig.json`)**:
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@packages/*": ["../../packages/*"]
+    }
+  }
+}
 ```
 
-### Todo con Docker
+### Runtime Support
 
-1. Ejecutar todo con Docker:
-
-```bash
-npm run docker:up
+**Backend** (`src/main.ts`):
+```typescript
+import 'tsconfig-paths/register';  // ← Resuelve @packages
 ```
 
-2. Ver logs:
-
-```bash
-npm run docker:logs
+**Scripts** (`package.json`):
+```json
+{
+  "dev": "ts-node -r tsconfig-paths/register src/main.ts"
+}
 ```
 
-3. Detener:
+## 🏷️ Tipos Compartidos
 
-```bash
-npm run docker:down
+### Interfaces Disponibles
+
+```typescript
+// packages/shared/src/types.ts
+export interface PurchaseRequest {
+  userId: string;
+}
+
+export interface PurchaseResponse {
+  success: boolean;
+  message: string;
+  cornsPurchased?: number;
+  nextAvailableAt?: Date;
+}
+
+export interface User {
+  id: string;
+  lastPurchase?: Date;
+  totalCorns: number;
+}
 ```
 
-## Scripts disponibles
+### Uso en Backend
 
-### Desarrollo local
-- `npm run dev` - Ejecuta frontend y backend localmente (sin DB)
-- `npm run dev:local` - DB en Docker, frontend y backend locales
+```typescript
+import { PurchaseRequest, PurchaseResponse } from '@packages/shared';
 
-### Solo base de datos
-- `npm run docker:db:up` - Solo base de datos en Docker
-- `npm run docker:db:down` - Detiene solo la base de datos
-- `npm run docker:db:logs` - Logs de la base de datos
+@Post()
+async purchase(@Body() body: PurchaseRequest): Promise<PurchaseResponse> {
+  // Implementación tipada
+}
+```
 
-### Todo con Docker
-- `npm run docker:up` - Ejecuta todo en Docker
-- `npm run docker:down` - Detiene todos los contenedores
-- `npm run docker:logs` - Muestra logs de Docker
+### Uso en Frontend
 
-## URLs
+```typescript
+import { PurchaseRequest, PurchaseResponse } from '@packages/shared';
 
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:3001
-- Base de datos: PostgreSQL en puerto 5432
+const data: PurchaseResponse = await response.json();
+```
 
-## Tecnologías
+## 🛠️ Scripts Disponibles
 
-- **Frontend**: Next.js 15, React, TypeScript, Tailwind CSS
-- **Backend**: NestJS, TypeScript
-- **Base de datos**: PostgreSQL
-- **Containerización**: Docker & Docker Compose
+- `npm run dev` - Frontend + Backend + PostgreSQL
+- `npm run frontend:dev` - Solo Next.js (puerto 3000)
+- `npm run backend:dev` - Solo NestJS (puerto 3001)
+
+## 🌐 API Endpoints
+
+### Base URL
+- **Desarrollo**: http://localhost:3001
+- **Swagger**: http://localhost:3001/api/docs
+
+### POST /purchase
+```json
+// Request
+{ "userId": "user123" }
+
+// Response (Success)
+{
+  "success": true,
+  "message": "Purchase successful!",
+  "cornsPurchased": 1,
+  "nextAvailableAt": "2025-10-16T22:14:12.113Z"
+}
+```
+
+## 🗄️ Base de Datos
+
+**PostgreSQL** (Docker):
+- Host: localhost:5432
+- Usuario: postgres
+- Password: postgres123
+- DB: bobs_corn
+
+## 🏗️ Estructura
+
+```
+Bob-s-Corn-/
+├── apps/
+│   ├── frontend/          # Next.js 15 + Tailwind
+│   └── backend/           # NestJS + TypeORM + PostgreSQL
+├── packages/
+│   └── shared/            # Tipos compartidos con @packages
+├── docker-compose.yml     # PostgreSQL
+└── package.json          # Scripts del monorepo
+```
+
+## ✨ Características
+
+- ✅ **Monorepo con npm workspaces**
+- ✅ **@packages aliases para imports limpios**
+- ✅ **Tipos TypeScript compartidos**
+- ✅ **Hot reload en desarrollo**
+- ✅ **PostgreSQL + TypeORM**
+- ✅ **Swagger API documentation**
+- ✅ **Rate limiting (1/minuto)**
+- ✅ **CORS configurado**

@@ -22,4 +22,10 @@ export interface User {
   totalCorns: number;
 }
 
+export interface UserCornTotal {
+  userId: string;
+  totalCorns: number;
+  lastPurchase: Date | null;
+}
+
 export type PurchaseResult = PurchaseResponse | RateLimitError;
