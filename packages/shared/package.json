@@ -2,9 +2,9 @@
   "name": "@bobs-corn/shared",
   "version": "0.1.0",
   "description": "Shared utilities and types for Bob's Corn monorepo",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "index.ts",
+  "module": "index.ts",
+  "types": "index.ts",
   "type": "module",
   "scripts": {
     "build": "tsc",
