@@ -1,8 +1,7 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { ConfigService } from '../config/config.service';
 import {
   PurchaseRequest,
   PurchaseResponse,
@@ -11,8 +10,6 @@ import {
 
 @Injectable()
 export class PurchaseService {
-  private readonly RATE_LIMIT_MS = ConfigService.getRateLimitConfig().windowMs;
-
   constructor(@InjectRepository(User) private userRepo: Repository<User>) {}
 
   async purchaseCorn(request: PurchaseRequest): Promise<PurchaseResponse> {
@@ -28,26 +25,6 @@ export class PurchaseService {
       });
     }
 
-    if (user.lastPurchase) {
-      const timeSince = now.getTime() - user.lastPurchase.getTime();
-
-      if (timeSince < this.RATE_LIMIT_MS) {
-        const retryAfter = Math.ceil((this.RATE_LIMIT_MS - timeSince) / 1000);
-
-        throw new HttpException(
-          {
-            error: 'RATE_LIMIT_EXCEEDED',
-            message: 'You can only purchase 1 corn per minute.',
-            retryAfter,
-            nextAvailableAt: new Date(
-              user.lastPurchase.getTime() + this.RATE_LIMIT_MS,
-            ),
-          },
-          HttpStatus.TOO_MANY_REQUESTS,
-        );
-      }
-    }
-
     user.lastPurchase = now;
 
     user.totalCorns += 1;
@@ -58,7 +35,7 @@ export class PurchaseService {
       success: true,
       message: 'Corn purchased! 🌽',
       cornsPurchased: 1,
-      nextAvailableAt: new Date(now.getTime() + this.RATE_LIMIT_MS),
+      nextAvailableAt: new Date(now.getTime() + 60000),
     };
   }
 
