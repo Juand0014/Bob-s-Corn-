@@ -23,11 +23,3 @@ export interface ErrorMessageProps {
   };
   timeRemaining: number;
 }
-
-export interface EmptyStateProps {
-  message: string;
-}
-
-export interface RateLimitInfoProps {
-  message?: string;
-}

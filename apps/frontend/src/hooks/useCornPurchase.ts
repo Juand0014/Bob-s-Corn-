@@ -45,7 +45,9 @@ export function useCornPurchase({ userId }: PurchaseRequest) {
   });
 
   const purchaseMutation = useMutation({
-    mutationFn: async (): Promise<PurchaseResponse> => {
+    mutationFn: async (): Promise<
+      PurchaseResponse & { headers?: { retryAfter?: number } }
+    > => {
       const purchaseData: PurchaseRequest = { userId };
       const response = await fetch(`${API_BASE_URL}/purchase`, {
         method: 'POST',
@@ -72,15 +74,26 @@ export function useCornPurchase({ userId }: PurchaseRequest) {
         };
       }
 
-      return response.json();
+      const data = await response.json();
+
+      const retryAfter = response.headers.get('Retry-After');
+      if (retryAfter) {
+        data.headers = { retryAfter: parseInt(retryAfter) };
+      }
+
+      return data;
     },
-    onSuccess: async () => {
+    onSuccess: async (
+      data: PurchaseResponse & { headers?: { retryAfter?: number } }
+    ) => {
       await queryClient.invalidateQueries({
         queryKey: [CORN_TOTAL_QUERY_KEY, userId],
       });
       setPurchaseError(null);
 
-      setTimeRemaining(60);
+      const waitTime = data.headers?.retryAfter || 60;
+
+      setTimeRemaining(waitTime);
     },
     onError: (error: PurchaseError) => {
       setPurchaseError(error);

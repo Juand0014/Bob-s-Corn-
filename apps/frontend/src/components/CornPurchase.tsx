@@ -2,13 +2,7 @@
 
 import { memo } from 'react';
 import { useCornPurchase } from '@/hooks/useCornPurchase';
-import {
-  CornStatsDisplay,
-  PurchaseButton,
-  ErrorMessage,
-  EmptyState,
-  RateLimitInfo,
-} from './index';
+import { CornStatsDisplay, PurchaseButton, ErrorMessage } from './index';
 
 interface CornPurchaseProps {
   userId: string;
@@ -26,12 +20,6 @@ export default memo(function CornPurchase({ userId }: CornPurchaseProps) {
     buttonText,
   } = useCornPurchase({ userId });
 
-  if (!userId.trim()) {
-    return (
-      <EmptyState message="Please enter a User ID to start purchasing corn" />
-    );
-  }
-
   return (
     <div className="space-y-6">
       <CornStatsDisplay cornTotal={cornTotal} isLoading={isLoadingTotal} />
@@ -47,8 +35,6 @@ export default memo(function CornPurchase({ userId }: CornPurchaseProps) {
       {purchaseError && (
         <ErrorMessage error={purchaseError} timeRemaining={timeRemaining} />
       )}
-
-      <RateLimitInfo />
     </div>
   );
 });
