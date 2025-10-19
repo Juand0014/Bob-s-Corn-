@@ -49,6 +49,7 @@ export function useCornPurchase({ userId }: PurchaseRequest) {
       PurchaseResponse & { headers?: { retryAfter?: number } }
     > => {
       const purchaseData: PurchaseRequest = { userId };
+
       const response = await fetch(`${API_BASE_URL}/purchase`, {
         method: 'POST',
         headers: {

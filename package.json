@@ -5,8 +5,7 @@
   "description": "Monorepo para Bob's Corn - Frontend (Next.js) y Backend (NestJS)",
   "workspaces": [
     "apps/*",
-    "packages/*",
-    "tools/*"
+    "packages/*"
   ],
   "scripts": {
     "dev": "concurrently --names \"FRONTEND,BACKEND\" --prefix-colors \"blue,green\" \"npm run frontend:dev\" \"npm run backend:dev\"",
