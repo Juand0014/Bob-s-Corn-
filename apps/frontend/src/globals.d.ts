@@ -1,4 +1,1 @@
-declare module '*.css';
-declare module '*.scss';
-declare module '*.sass';
-declare module '*.less';
+// CSS module types moved to src/types/css.d.ts to avoid duplication
