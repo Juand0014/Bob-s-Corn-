@@ -12,6 +12,25 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - bobs-corn-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: bobs-corn-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - bobs-corn-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
 
   backend:
     build:
@@ -20,10 +39,17 @@ services:
     container_name: bobs-corn-backend
     environment:
       DATABASE_URL: postgresql://postgres:postgres123@database:5432/bobs_corn_db
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ""
+      REDIS_DB: 0
     ports:
       - "3001:3001"
     depends_on:
       - database
+      - redis
+    networks:
+      - bobs-corn-network
 
   frontend:
     build:
@@ -36,6 +62,13 @@ services:
       - "3000:3000"
     depends_on:
       - backend
+    networks:
+      - bobs-corn-network
+
+networks:
+  bobs-corn-network:
+    driver: bridge
 
 volumes:
   postgres_data:
+  redis_data:
