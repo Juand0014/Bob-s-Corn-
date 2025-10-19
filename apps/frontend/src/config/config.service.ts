@@ -1,4 +1,4 @@
-export interface AppConfig {
+interface AppConfig {
   apiUrl: string;
   apiDocsUrl: string;
   appName: string;

@@ -28,4 +28,15 @@ export interface UserCornTotal {
   lastPurchase: Date | null;
 }
 
-export type PurchaseResult = PurchaseResponse | RateLimitError;
+export interface RateLimitResult {
+  allowed: boolean;
+  remainingRequests?: number;
+  resetTime?: number;
+  retryAfter?: number;
+}
+
+export interface RateLimitConfig {
+  windowMs: number;
+  maxRequests: number;
+  limitBy: 'user' | 'machine';
+}
