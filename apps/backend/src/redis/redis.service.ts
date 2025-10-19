@@ -8,6 +8,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
   constructor() {
     const config = ConfigService.getRedisConfig();
+
     this.client = new Redis({
       host: config.host,
       port: config.port,
@@ -32,6 +33,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
   async onModuleInit(): Promise<void> {
     try {
       await this.client.ping();
+
       console.log('Redis connection established');
     } catch (error) {
       console.error('Failed to connect to Redis:', error);
