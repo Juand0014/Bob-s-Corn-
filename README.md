@@ -1,170 +1,173 @@
-# Bob's Corn Monorepo
+# Bob's Corn 🌽
 
-Un monorepo full-stack con Next.js, NestJS, y tipos TypeScript compartidos usando `@packages` aliases.
+A full-stack corn purchasing app with Redis-based rate limiting.
 
-## 🚀 Inicio Rápido
+## Description
+
+Bob's Corn demonstrates a rate-limited purchasing system where users can buy corn once per minute. Built with Next.js, NestJS, PostgreSQL, and Redis.
+
+Features:
+- Rate limiting (1 purchase per minute)
+- Sliding window algorithm with Redis
+- Shared TypeScript types
+- Real-time updates
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+- Docker & Docker Compose
+
+### Installation
+
+1. Clone and install
+```bash
+git clone https://github.com/Juand0014/Bob-s-Corn-.git
+cd Bob-s-Corn-
+npm install
+```
+
+2. Set up environment
+```bash
+cp .env.example .env
+cp apps/frontend/.env.example apps/frontend/.env.local
+cp apps/backend/.env.example apps/backend/.env
+```
+
+3. Start services
+```bash
+npm run dev:local     # Start all, apps in the local and up docker container
+```
+
+Visit front http://localhost:3000
+Visit back http://localhost:3000/api
+
+### Environment Variables
+
+**Backend (.env)**
+```env
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=postgres123
+POSTGRES_DB=bobs_corn_db
+
+REDIS_HOST=localhost
+REDIS_PORT=6379
+
+RATE_LIMIT_WINDOW_MS=60000
+RATE_LIMIT_MAX_REQUESTS=1
+
+PORT=3001
+CORS_ORIGIN=http://localhost:3000
+```
+
+**Frontend (.env.local)**
+```env
+NODE_ENV=development
+
+NEXT_PUBLIC_API_URL=http://localhost:3001
+```
+
+## Testing
 
 ```bash
-# 1. Instalación
-npm install
-
-# 2. Base de datos (Docker)
-docker-compose up -d
-
-# 3. Desarrollo completo
-npm run dev
+npm run test
+npm run lint
 ```
 
-## 📦 Configuración de @packages
+## Architecture
 
-Este monorepo usa `@packages` como alias para importaciones limpias:
+### Tech Stack
+- **Frontend**: Next.js 15, Tailwind CSS, React Query
+- **Backend**: NestJS, TypeORM, Redis
+- **Database**: PostgreSQL, Redis
+- **Shared**: TypeScript types with `@packages` aliases
 
-```typescript
-// ✅ Con @packages (limpio)
-import { User, PurchaseRequest } from '@packages/shared';
+### Rate Limiting
+Uses Redis sorted sets for sliding window rate limiting:
+- Tracks request timestamps
+- Automatically cleans expired requests
+- Prevents request bursts at window boundaries
 
-// ❌ Sin alias (complicado) 
-import { User } from '../../../../packages/shared/src/types';
-```
-
-### Configuración TypeScript
-
-**Backend (`apps/backend/tsconfig.json`)**:
-```json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@packages/*": ["../../packages/*"]
-    }
-  }
-}
-```
-
-**Frontend (`apps/frontend/tsconfig.json`)**:
-```json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@packages/*": ["../../packages/*"]
-    }
-  }
-}
-```
-
-### Runtime Support
-
-**Backend** (`src/main.ts`):
-```typescript
-import 'tsconfig-paths/register';  // ← Resuelve @packages
-```
-
-**Scripts** (`package.json`):
-```json
-{
-  "dev": "ts-node -r tsconfig-paths/register src/main.ts"
-}
-```
-
-## 🏷️ Tipos Compartidos
-
-### Interfaces Disponibles
-
-```typescript
-// packages/shared/src/types.ts
-export interface PurchaseRequest {
-  userId: string;
-}
-
-export interface PurchaseResponse {
-  success: boolean;
-  message: string;
-  cornsPurchased?: number;
-  nextAvailableAt?: Date;
-}
-
-export interface User {
-  id: string;
-  lastPurchase?: Date;
-  totalCorns: number;
-}
-```
-
-### Uso en Backend
-
-```typescript
-import { PurchaseRequest, PurchaseResponse } from '@packages/shared';
-
-@Post()
-async purchase(@Body() body: PurchaseRequest): Promise<PurchaseResponse> {
-  // Implementación tipada
-}
-```
-
-### Uso en Frontend
-
-```typescript
-import { PurchaseRequest, PurchaseResponse } from '@packages/shared';
-
-const data: PurchaseResponse = await response.json();
-```
-
-## 🛠️ Scripts Disponibles
-
-- `npm run dev` - Frontend + Backend + PostgreSQL
-- `npm run frontend:dev` - Solo Next.js (puerto 3000)
-- `npm run backend:dev` - Solo NestJS (puerto 3001)
-
-## 🌐 API Endpoints
-
-### Base URL
-- **Desarrollo**: http://localhost:3001
-- **Swagger**: http://localhost:3001/api/docs
-
-### POST /purchase
-```json
-// Request
-{ "userId": "user123" }
-
-// Response (Success)
-{
-  "success": true,
-  "message": "Purchase successful!",
-  "cornsPurchased": 1,
-  "nextAvailableAt": "2025-10-16T22:14:12.113Z"
-}
-```
-
-## 🗄️ Base de Datos
-
-**PostgreSQL** (Docker):
-- Host: localhost:5432
-- Usuario: postgres
-- Password: postgres123
-- DB: bobs_corn
-
-## 🏗️ Estructura
-
+### Project Structure
 ```
 Bob-s-Corn-/
 ├── apps/
-│   ├── frontend/          # Next.js 15 + Tailwind
-│   └── backend/           # NestJS + TypeORM + PostgreSQL
+│   ├── frontend/        # Next.js app
+│   └── backend/         # NestJS API
 ├── packages/
-│   └── shared/            # Tipos compartidos con @packages
-├── docker-compose.yml     # PostgreSQL
-└── package.json          # Scripts del monorepo
+│   └── shared/          # Shared TypeScript types
+├── docker-compose.yml   # Full stack
+└── docker-compose.db.yml # Databases only
 ```
 
-## ✨ Características
+## API Endpoints
 
-- ✅ **Monorepo con npm workspaces**
-- ✅ **@packages aliases para imports limpios**
-- ✅ **Tipos TypeScript compartidos**
-- ✅ **Hot reload en desarrollo**
-- ✅ **PostgreSQL + TypeORM**
-- ✅ **Swagger API documentation**
-- ✅ **Rate limiting (1/minuto)**
-- ✅ **CORS configurado**
+**POST /purchase**
+```json
+Request: { "userId": "user123" }
+Response: {
+  "success": true,
+  "message": "Corn purchased! 🌽",
+  "cornsPurchased": 1,
+  "nextAvailableAt": "2025-10-20T15:30:00.000Z"
+}
+```
+
+**GET /purchase/:userId**
+```json
+Response: {
+  "userId": "user123",
+  "totalCorns": 5,
+  "lastPurchase": "2025-10-20T15:28:30.000Z"
+}
+```
+
+Rate limited responses return 429 status with retry information.
+
+## Docker
+
+**Full stack:**
+```bash
+npm run docker:up
+npm run docker:down
+```
+
+**Databases only:**
+```bash
+npm run docker:db:up
+npm run docker:db:down
+```
+
+## Scripts
+
+### Development
+```bash
+npm run dev              # Frontend + Backend
+npm run dev:local        # Include databases
+npm run frontend:dev     # Frontend only (port 3000)
+npm run backend:dev      # Backend only (port 3001)
+```
+
+### Production
+```bash
+npm run build
+npm run start
+```
+
+### Utilities
+```bash
+npm run test             # Run tests
+npm run lint             # Check code quality
+npm run clean            # Clean node_modules
+```
+
+## Limitations
+
+- No authentication system
+- Rate limiting resets on Redis restart
+- Limited to single backend instance
+- No comprehensive test coverage

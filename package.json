@@ -11,6 +11,7 @@
     "dev": "concurrently --names \"FRONTEND,BACKEND\" --prefix-colors \"blue,green\" \"npm run frontend:dev\" \"npm run backend:dev\"",
     "dev:frontend": "npm run dev --workspace=apps/frontend",
     "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:local": "concurrently --names \"DB,APPS\" --prefix-colors \"blue,yellow\" \"npm run docker:db:up\" \"npm run dev\"",
     "build": "npm run build --workspaces --if-present",
     "start": "npm run start --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
@@ -29,8 +30,7 @@
     "docker:logs": "docker-compose logs -f",
     "docker:db:up": "docker-compose -f docker-compose.db.yml up -d",
     "docker:db:down": "docker-compose -f docker-compose.db.yml down",
-    "docker:db:logs": "docker-compose -f docker-compose.db.yml logs -f",
-    "dev:local": "concurrently --names \"DB,APPS\" --prefix-colors \"blue,yellow\" \"npm run docker:db:up\" \"npm run dev\""
+    "docker:db:logs": "docker-compose -f docker-compose.db.yml logs -f"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

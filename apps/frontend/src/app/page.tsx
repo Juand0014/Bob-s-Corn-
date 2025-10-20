@@ -15,11 +15,11 @@ export default function Home() {
           <div className="bg-white rounded-xl shadow-2xl p-8 max-w-md w-full">
             <div className="text-center mb-8">
               <h1 className="text-5xl font-bold text-yellow-600 mb-3">
-                🌽 {config.appName}
+                🌽 Bob&apos;s Corn
               </h1>
-              <p className="text-gray-600 text-lg">{config.appDescription}</p>
+              <p className="text-gray-600 text-lg">Fresh corn for everyone!</p>
               <p className="text-sm text-gray-500 mt-1">
-                {config.rateLimitMessage}
+                Fair policy: 1 corn per minute per customer
               </p>
             </div>
 
