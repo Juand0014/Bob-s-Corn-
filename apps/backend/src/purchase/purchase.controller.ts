@@ -1,8 +1,6 @@
-import { Controller, Post, Get, Body, Param, Req } from '@nestjs/common';
+import { Controller, Post, Get, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBody } from '@nestjs/swagger';
-import { Request } from 'express';
 import { PurchaseService } from './purchase.service';
-import { RateLimiterService } from '../rate-limiter/rate-limiter.service';
 import {
   PurchaseRequest,
   PurchaseResponse,
@@ -12,10 +10,7 @@ import {
 @ApiTags('Purchase')
 @Controller('purchase')
 export class PurchaseController {
-  constructor(
-    private readonly purchaseService: PurchaseService,
-    private readonly rateLimiterService: RateLimiterService,
-  ) {}
+  constructor(private readonly purchaseService: PurchaseService) {}
 
   @Post()
   @ApiOperation({ summary: 'Purchase corn' })
@@ -23,37 +18,15 @@ export class PurchaseController {
     schema: {
       type: 'object',
       properties: {
-        userId: {
-          type: 'string',
-          example: 'user123',
-          description: 'User ID for the purchase',
-        },
+        userId: { type: 'string' },
       },
       required: ['userId'],
     },
   })
   async purchaseCorn(
     @Body() request: PurchaseRequest,
-    @Req() req: Request,
   ): Promise<PurchaseResponse> {
-    const result = await this.purchaseService.purchaseCorn(request);
-
-    const machineId = this.getClientIdentifier(req);
-
-    await this.rateLimiterService.recordSuccessfulRequest(
-      request.userId,
-      machineId,
-    );
-
-    return result;
-  }
-
-  private getClientIdentifier(req: Request): string {
-    const ip = req.ip || req.socket?.remoteAddress || 'unknown';
-
-    const userAgent = req.get('User-Agent') || 'unknown';
-
-    return `${ip}:${userAgent}`;
+    return await this.purchaseService.purchaseCorn(request);
   }
 
   @Get(':userId')

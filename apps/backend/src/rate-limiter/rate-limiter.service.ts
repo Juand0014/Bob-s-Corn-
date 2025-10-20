@@ -24,7 +24,7 @@ export class RateLimiterService {
   }
 
   private generateRateLimitKey(userId?: string, machineId?: string): string {
-    const identifier = userId || machineId;
+    const identifier = this.limitBy === 'user' ? userId : machineId;
 
     return `rate_limit:${this.limitBy}:${identifier}`;
   }

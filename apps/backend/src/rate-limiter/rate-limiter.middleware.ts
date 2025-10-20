@@ -38,6 +38,8 @@ export class RateLimiterMiddleware implements NestMiddleware {
         return;
       }
 
+      await this.rateLimiterService.recordSuccessfulRequest(userId, machineId);
+
       const rateLimitConfig = this.getRateLimitConfig();
 
       const nextRequestTime = Math.ceil(rateLimitConfig.windowMs / 1000);
@@ -53,10 +55,13 @@ export class RateLimiterMiddleware implements NestMiddleware {
 
   private getClientIdentifier(req: Request): string {
     const ip = req.ip || req.socket?.remoteAddress || 'unknown';
-
     const userAgent = req.get('User-Agent') || 'unknown';
 
-    return `${ip}:${userAgent}`;
+    const forwarded = req.get('X-Forwarded-For') || '';
+
+    const realIP = req.get('X-Real-IP') || '';
+
+    return `${ip}:${userAgent}:${forwarded}:${realIP}`;
   }
 
   private setRateLimitHeaders(res: Response, result: RateLimitResult): void {
