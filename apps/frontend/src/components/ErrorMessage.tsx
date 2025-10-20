@@ -1,10 +1,27 @@
 import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 import { ErrorMessageProps } from './types';
 
 export const ErrorMessage = memo(function ErrorMessage({
   error,
   timeRemaining,
 }: ErrorMessageProps) {
+  const t = useTranslations('purchase');
+  const tCommon = useTranslations('common');
+
+  const getErrorMessage = () => {
+    if (error.isRateLimit) {
+      return t('rateLimitExceeded');
+    }
+    if (error.message === 'Failed to purchase corn') {
+      return t('failedToPurchase');
+    }
+    if (error.message === 'Failed to fetch corn total') {
+      return t('failedToFetchTotal');
+    }
+    return error.message;
+  };
+
   return (
     <div
       className={`p-4 rounded-lg text-sm font-medium ${
@@ -13,10 +30,10 @@ export const ErrorMessage = memo(function ErrorMessage({
           : 'bg-red-100 text-red-800 border border-red-200'
       }`}
     >
-      {error.message}
+      {getErrorMessage()}
       {timeRemaining > 0 && (
         <div className="text-xs mt-1 opacity-75">
-          Next purchase available in {timeRemaining} seconds
+          {tCommon('nextPurchaseAvailable', { seconds: timeRemaining })}
         </div>
       )}
     </div>

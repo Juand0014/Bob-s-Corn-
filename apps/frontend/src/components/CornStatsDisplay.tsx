@@ -1,10 +1,13 @@
 import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 import { CornStatsDisplayProps } from './types';
 
 export const CornStatsDisplay = memo(function CornStatsDisplay({
   cornTotal,
   isLoading,
 }: CornStatsDisplayProps) {
+  const t = useTranslations('purchase');
+
   return (
     <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-6 border border-yellow-200">
       <div className="text-center">
@@ -13,7 +16,7 @@ export const CornStatsDisplay = memo(function CornStatsDisplay({
           {isLoading ? '...' : cornTotal}
         </div>
         <div className="text-sm text-gray-600">
-          {cornTotal === 1 ? 'Corn Purchased' : 'Corns Purchased'}
+          {t('cornsPurchased')}
         </div>
       </div>
     </div>

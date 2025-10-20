@@ -1,0 +1,13 @@
+{
+  "appName": "Bob's Corn",
+  "tagline": "Fresh corn for everyone!",
+  "fairPolicy": "Fair policy: 1 corn per minute per customer",
+  "enterUserId": "Enter Your User ID",
+  "enterUserIdPlaceholder": "Enter your User ID above to start buying corn!",
+  "loading": "Loading...",
+  "error": "Error",
+  "retry": "Retry",
+  "wait": "Wait",
+  "seconds": "seconds",
+  "nextPurchaseAvailable": "Next purchase available in {seconds} seconds"
+}

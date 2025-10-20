@@ -1,0 +1,14 @@
+{
+  "buyCorn": "Buy Corn",
+  "purchasing": "Purchasing...",
+  "buying": "Buying...",
+  "waitToBuyAgain": "Wait {seconds}s to buy again",
+  "cornPurchased": "Corn purchased! 🌽",
+  "cornsPurchased": "Corns Purchased",
+  "totalCorns": "Total Corns",
+  "failedToPurchase": "Failed to purchase corn",
+  "failedToFetchTotal": "Failed to fetch corn total",
+  "rateLimitExceeded": "Rate limit exceeded. Please wait before purchasing again.",
+  "purchaseError": "Purchase Error",
+  "tryAgainLater": "Please try again later"
+}

@@ -1,0 +1,13 @@
+{
+  "appName": "Maíz de Bob",
+  "tagline": "¡Maíz fresco para todos!",
+  "fairPolicy": "Política justa: 1 maíz por minuto por cliente",
+  "enterUserId": "Ingresa tu ID de Usuario",
+  "enterUserIdPlaceholder": "¡Ingresa tu ID de Usuario arriba para comenzar a comprar maíz!",
+  "loading": "Cargando...",
+  "error": "Error",
+  "retry": "Reintentar",
+  "wait": "Esperar",
+  "seconds": "segundos",
+  "nextPurchaseAvailable": "Próxima compra disponible en {seconds} segundos"
+}

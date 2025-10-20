@@ -1,0 +1,14 @@
+{
+  "buyCorn": "Comprar Maíz",
+  "purchasing": "Comprando...",
+  "buying": "Comprando...",
+  "waitToBuyAgain": "Espera {seconds}s para comprar de nuevo",
+  "cornPurchased": "¡Maíz comprado! 🌽",
+  "cornsPurchased": "Maíces Comprados",
+  "totalCorns": "Total de Maíces",
+  "failedToPurchase": "Error al comprar maíz",
+  "failedToFetchTotal": "Error al obtener el total de maíz",
+  "rateLimitExceeded": "Límite de velocidad excedido. Por favor espera antes de comprar de nuevo.",
+  "purchaseError": "Error de Compra",
+  "tryAgainLater": "Por favor intenta más tarde"
+}

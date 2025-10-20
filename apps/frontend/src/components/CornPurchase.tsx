@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 import { useCornPurchase } from '@/hooks/useCornPurchase';
 import { CornStatsDisplay, PurchaseButton, ErrorMessage } from './index';
 
@@ -8,7 +8,8 @@ interface CornPurchaseProps {
   userId: string;
 }
 
-export default memo(function CornPurchase({ userId }: CornPurchaseProps) {
+export const CornPurchase = ({ userId }: CornPurchaseProps) => {
+  const t = useTranslations('purchase');
   const {
     cornTotal,
     isLoadingTotal,
@@ -17,8 +18,17 @@ export default memo(function CornPurchase({ userId }: CornPurchaseProps) {
     timeRemaining,
     handlePurchase,
     isDisabled,
-    buttonText,
   } = useCornPurchase({ userId });
+
+  const getButtonText = () => {
+    if (isPurchasing) {
+      return t('buying');
+    }
+    if (timeRemaining > 0) {
+      return t('waitToBuyAgain', { seconds: timeRemaining });
+    }
+    return t('buyCorn');
+  };
 
   return (
     <div className="space-y-6">
@@ -29,7 +39,7 @@ export default memo(function CornPurchase({ userId }: CornPurchaseProps) {
         disabled={isDisabled}
         isPurchasing={isPurchasing}
         timeRemaining={timeRemaining}
-        buttonText={buttonText}
+        buttonText={getButtonText()}
       />
 
       {purchaseError && (
@@ -37,4 +47,4 @@ export default memo(function CornPurchase({ userId }: CornPurchaseProps) {
       )}
     </div>
   );
-});
+};

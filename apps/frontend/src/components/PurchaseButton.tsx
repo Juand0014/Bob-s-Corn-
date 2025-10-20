@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslations } from 'next-intl';
 import { PurchaseButtonProps } from './types';
 import { LoadingSpinner } from './LoadingSpinner';
 
@@ -9,18 +10,20 @@ export const PurchaseButton = memo(function PurchaseButton({
   timeRemaining,
   buttonText,
 }: PurchaseButtonProps) {
+  const t = useTranslations('purchase');
+
   const getButtonContent = () => {
     if (isPurchasing) {
       return (
         <div className="flex items-center justify-center space-x-2">
           <LoadingSpinner size={5} color="white" />
-          <span>Purchasing...</span>
+          <span>{t('purchasing')}</span>
         </div>
       );
     }
 
     if (timeRemaining > 0) {
-      return `Wait ${timeRemaining}s to buy again`;
+      return t('waitToBuyAgain', { seconds: timeRemaining });
     }
 
     return buttonText;

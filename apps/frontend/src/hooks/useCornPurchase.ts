@@ -64,7 +64,7 @@ export function useCornPurchase({ userId }: PurchaseRequest) {
 
           throw {
             isRateLimit: true,
-            message: errorData.message,
+            message: 'Rate limit exceeded',
             retryAfter: errorData.retryAfter,
           };
         }
@@ -143,16 +143,8 @@ export function useCornPurchase({ userId }: PurchaseRequest) {
   );
 
   const buttonText = useMemo(() => {
-    if (purchaseMutation.isPending) {
-      return 'Buying...';
-    }
-
-    if (timeRemaining > 0) {
-      return `Wait ${timeRemaining}s`;
-    }
-
-    return 'Buy Corn';
-  }, [purchaseMutation.isPending, timeRemaining]);
+    return 'Buy Corn'; // This will be overridden in the component with translations
+  }, []);
 
   const currentTotal = useMemo(
     () => cornTotal?.totalCorns ?? 0,

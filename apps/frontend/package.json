@@ -6,11 +6,17 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "i18n:validate": "node scripts/i18n-manager.js validate",
+    "i18n:sync": "node scripts/i18n-manager.js sync",
+    "i18n:add": "node scripts/i18n-manager.js add",
+    "i18n:todos": "node scripts/i18n-manager.js todos",
+    "i18n:help": "node scripts/i18n-manager.js"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.5",
     "next": "15.5.5",
+    "next-intl": "^4.3.12",
     "react": "19.1.0",
     "react-dom": "19.1.0"
   },
